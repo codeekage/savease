@@ -22,7 +22,7 @@
       });
       async function loign(email, password) {
         const logged = await fetch(
-          "https://us-central1-save-ease.cloudfunctions.net/auth/login",
+          "http://localhost:5000/save-ease/us-central1/auth/login",
           {
             method: "POST",
             body: JSON.stringify({
