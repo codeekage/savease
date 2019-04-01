@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as cors from 'cors'
 import AuthService from '../controllers/auth.controller'
-const authService = new AuthService()
+const auth = new AuthService()
 export const app = express()
 
 app.use(cors())
@@ -9,7 +9,7 @@ app.use(cors())
 app.post('/signup', async (request, response) => {
   try {
     const { email, password } = request.body
-    const loggedIn = await authService.signUp(email, password)
+    const loggedIn = await auth.signUp(email, password)
     response.send(loggedIn)
   } catch (error) {
     console.error(error)
@@ -20,7 +20,7 @@ app.post('/signup', async (request, response) => {
 app.post('/login', async (request, response) => {
   try {
     const { email, password } = request.body
-    const loggedIn = await authService.login(email, password)
+    const loggedIn = await auth.login(email, password)
     response.send(loggedIn)
   } catch (error) {
     console.error(error)
@@ -30,7 +30,7 @@ app.post('/login', async (request, response) => {
 
 app.get('/nodes', async (request, response) => {
   try {
-    const nodes = await authService.nodes()
+    const nodes = await auth.nodes()
     response.send(nodes)
   } catch (error) {
     console.error(error)
@@ -40,7 +40,7 @@ app.get('/nodes', async (request, response) => {
 
 app.get('/logout', async (request, response) => {
   try {
-    const nodes = await authService.logout()
+    const nodes = await auth.logout()
     response.send(nodes)
   } catch (error) {
     console.error(error)
@@ -50,7 +50,7 @@ app.get('/logout', async (request, response) => {
 
 app.get('/profile', async (request, response) => {
   try {
-    const nodes = await authService.profile()
+    const nodes = await auth.profile()
     response.send(nodes)
   } catch (error) {
     console.error(error)
