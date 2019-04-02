@@ -8,6 +8,7 @@ const config = {
   storageBucket: 'save-ease.appspot.com',
   messagingSenderId: '899728875953',
 }
+
 firebase.initializeApp(config)
 
 export default class FirebaseService {
