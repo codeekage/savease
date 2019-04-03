@@ -10,31 +10,65 @@
     <div>
       <input type="email" name="email" id="email" placeholder="email" />
       <input type="text" name="password" id="password" placeholder="password" />
-      <input type="submit" value="submit" id="submit" />
+      <input type="submit" value="login" id="submit" />
+    </div>
+
+    <div style="margin:10px">
+      <input type="text" name="amout" id="amount" placeholder="Amount" />
+      <input type="text" name="qty" id="qty" placeholder="Qty." />
+      <input type="text" name="unit" id="unit" placeholder="Unit" />
+      <input type="submit" value="batch" id="batch" />
     </div>
 
     <script>
+      //amount, qty, unit
+      const authURL = "http://localhost:5000/save-ease/us-central1/auth/";
+      const transURL =
+        "http://localhost:5000/save-ease/us-central1/units";
       document.querySelector("#submit").addEventListener("click", e => {
         e.preventDefault();
         const email = document.querySelector("#email").value;
         const password = document.querySelector("#password").value;
-        loign(email, password);
-      });
-      async function loign(email, password) {
-        const logged = await fetch(
-          "https://us-central1-save-ease.cloudfunctions.net/auth/signup",
-          {
-            method: "POST",
-            body: JSON.stringify({
+        post(`${authURL}/login`, { email, password })
+          .then(data => {
+            console.log(data);
+            post(`${transURL}/login?email=${email}&password=${password}`, {
               email,
               password
-            }),
+            })
+              .then(user => console.log(user))
+              .catch(error => console.log(error));
+          })
+          .catch(error => console.log(error));
+      });
+
+      document.querySelector("#batch").addEventListener("click", e => {
+        e.preventDefault();
+        const amount = document.querySelector("#amount").value;
+        const qty = document.querySelector("#qty").value;
+        const unit = document.querySelector("#unit").value;
+      });
+
+      async function post(url, body) {
+        try {    
+          const logged = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(body),
             headers: {
               "Content-Type": "application/json"
             }
-          }
-        );
-        console.log(logged);
+          });
+          const json = await logged.json();
+          return json;
+        } catch (error) {
+          console.error(error)
+          return error
+        }
+      }
+      async function get(url) {
+        const data = await fetch(url);
+        const json = await data.json();
+        return await json;
       }
     </script>
   </body>

@@ -1,59 +1,53 @@
-import * as express from 'express'
-import * as cors from 'cors'
-import AuthService from '../controllers/auth.controller'
-const auth = new AuthService()
-export const service = express()
+import FirebaseService from './firebase.service'
 
-service.use(cors())
+export default class AuthService extends FirebaseService {
 
-service.post('/signup', async (request, response) => {
-  try {
-    const { email, password } = request.body
-    const loggedIn = await auth.signUp(email, password)
-    response.send(loggedIn)
-  } catch (error) {
-    console.error(error)
-    response.status(500).send(error)
+   signUp = async (email: string, password: string): Promise<object> => {
+    try {
+      const newUser = await this.auth.createUserWithEmailAndPassword(
+        email,
+        password
+      )
+      return Promise.resolve(newUser)
+    } catch (error) {
+      console.error(error)
+      return Promise.reject(error)
+    }
   }
-})
 
-service.post('/login', async (request, response) => {
-  try {
-    const { email, password } = request.body
-    const loggedIn = await auth.login(email, password)
-    response.send(loggedIn)
-  } catch (error) {
-    console.error(error)
-    response.status(500).send(error)
+  async login(email: string, password: string): Promise<object> {
+    try {
+      const loggedUser = await this.auth.signInWithEmailAndPassword(
+        email, password
+      )
+      return Promise.resolve(loggedUser)
+    } catch (error) {
+      console.error(error)
+      return Promise.reject(error)
+    }
   }
-})
 
-service.get('/nodes', async (request, response) => {
-  try {
-    const nodes = await auth.nodes()
-    response.send(nodes)
-  } catch (error) {
-    console.error(error)
-    response.status(500).send({ error })
+  async logout(): Promise<object> {
+    try {
+      await this.auth.signOut()
+      return Promise.resolve({ state: `logged out` })
+    } catch (error) {
+      console.error(error)
+      return Promise.reject({ state: `Failed ${error}` })
+    }
   }
-})
 
-service.get('/logout', async (request, response) => {
-  try {
-    const nodes = await auth.logout()
-    response.send(nodes)
-  } catch (error) {
-    console.error(error)
-    response.status(500).send({ error })
+  async currentUser(): Promise<object> {
+    try {
+      const user = await this.auth.currentUser
+      if (user) {
+        return Promise.resolve(user)
+      }
+      return Promise.reject({ error: `You're not logged in!` })
+    } catch (error) {
+      console.error(error)
+      return Promise.reject(error)
+    }
   }
-})
 
-service.get('/profile', async (request, response) => {
-  try {
-    const nodes = await auth.profile()
-    response.send(nodes)
-  } catch (error) {
-    console.error(error)
-    response.status(500).send({ error })
-  }
-})
+}
