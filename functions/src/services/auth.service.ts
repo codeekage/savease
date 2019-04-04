@@ -29,7 +29,7 @@ export default class AuthService extends FirebaseService {
     }
   }
 
-  async logout(): Promise<object> {
+  async logout(): Promise<Result> {
     try {
       await this.auth.signOut()
       return Promise.resolve({ success: true, data: 'logged out' })
