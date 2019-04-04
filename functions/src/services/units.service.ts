@@ -25,7 +25,7 @@ export default class UnitService extends FirebaseService {
       const data = new Array()
       const units = await this.firestore.collection('units').get()
       units.forEach(async unit => {
-        await data.push(unit.data())
+        await data.push(unit.id, unit.data())
       })
       return Promise.resolve({ success: true, data })
     } catch (error) {
@@ -40,8 +40,7 @@ export default class UnitService extends FirebaseService {
         .collection('units')
         .doc(`${unitId}`)
         .get()
-      const { data } = units
-      return Promise.resolve({ success: true, data })
+      return Promise.resolve({ success: true, data : units.data() })
     } catch (error) {
       console.error(error)
       return Promise.reject({ success: false, error })

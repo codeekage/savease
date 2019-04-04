@@ -7,7 +7,7 @@ const userLogin = {};
 export async function handleLoginWithBody(request : Request, response : Response)  {
   try {
     const { email, password } = request.body
-    const loggedIn = auth.login(email, password)
+    const loggedIn = await auth.login(email, password)
     Object.assign(userLogin, { email, password })
     response.send(loggedIn)
   } catch (error) {
@@ -19,7 +19,7 @@ export async function handleLoginWithBody(request : Request, response : Response
 export async function handleLoginWithQuery(request : Request, response : Response)  {
   try {
     const { email, password } = request.query
-    const loggedIn = auth.login(email, password)
+    const loggedIn = await auth.login(email, password)
     response.send(loggedIn)
   } catch (error) {
     console.error(error)

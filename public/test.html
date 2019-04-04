@@ -23,8 +23,7 @@
     <script>
       //amount, qty, unit
       const authURL = "http://localhost:5000/save-ease/us-central1/auth/";
-      const transURL =
-        "http://localhost:5000/save-ease/us-central1/units";
+      const transURL = "http://localhost:5000/save-ease/us-central1/units";
       document.querySelector("#submit").addEventListener("click", e => {
         e.preventDefault();
         const email = document.querySelector("#email").value;
@@ -44,13 +43,29 @@
 
       document.querySelector("#batch").addEventListener("click", e => {
         e.preventDefault();
-        const amount = document.querySelector("#amount").value;
-        const qty = document.querySelector("#qty").value;
-        const unit = document.querySelector("#unit").value;
+        post(`${transURL}/batch`, {
+          batched: {
+            "4cZiOU2EaV4n1VjxFrlV": 30,
+            "gZbfHiLtPqkOhyaFNTNH" : 10,
+            "sTjwAqfHRunyPlwCQY0e" : 5
+          }
+        }).then(price => {
+          console.log(price);
+        }).catch(error => console.log(error));
+
+        post(`${transURL}/batch/pins`, {
+          batched: {
+            "4cZiOU2EaV4n1VjxFrlV": 1,
+            "gZbfHiLtPqkOhyaFNTNH" : 1,
+            "sTjwAqfHRunyPlwCQY0e" : 5
+          }
+        }).then(price => {
+          console.log(price);
+        }).catch(error => console.log(error));
       });
 
       async function post(url, body) {
-        try {    
+        try {
           const logged = await fetch(url, {
             method: "POST",
             body: JSON.stringify(body),
@@ -61,8 +76,8 @@
           const json = await logged.json();
           return json;
         } catch (error) {
-          console.error(error)
-          return error
+          console.error(error);
+          return error;
         }
       }
       async function get(url) {
