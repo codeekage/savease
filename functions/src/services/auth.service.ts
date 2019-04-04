@@ -1,53 +1,54 @@
 import FirebaseService from './firebase.service'
 
-export default class AuthService extends FirebaseService {
+interface Result {
+  success: boolean
+  data: {} | undefined
+}
 
-   signUp = async (email: string, password: string): Promise<object> => {
+export default class AuthService extends FirebaseService {
+  signUp = async (email: string, password: string): Promise<Result> => {
     try {
-      const newUser = await this.auth.createUserWithEmailAndPassword(
+      const data = await this.auth.createUserWithEmailAndPassword(
         email,
         password
       )
-      return Promise.resolve(newUser)
+      return Promise.resolve({ success: true, data })
     } catch (error) {
       console.error(error)
       return Promise.reject(error)
     }
   }
 
-  async login(email: string, password: string): Promise<object> {
+  async login(email: string, password: string): Promise<Result> {
     try {
-      const loggedUser = await this.auth.signInWithEmailAndPassword(
-        email, password
-      )
-      return Promise.resolve(loggedUser)
+      const data = await this.auth.signInWithEmailAndPassword(email, password)
+      return Promise.resolve({ success: true, data })
     } catch (error) {
       console.error(error)
-      return Promise.reject(error)
+      return Promise.reject({ success: false, error })
     }
   }
 
   async logout(): Promise<object> {
     try {
       await this.auth.signOut()
-      return Promise.resolve({ state: `logged out` })
+      return Promise.resolve({ success: true, data: 'logged out' })
     } catch (error) {
       console.error(error)
-      return Promise.reject({ state: `Failed ${error}` })
+      return Promise.reject({ success: false, error })
     }
   }
 
-  async currentUser(): Promise<object> {
+  async currentUser(): Promise<Result> {
     try {
       const user = await this.auth.currentUser
       if (user) {
-        return Promise.resolve(user)
+        return Promise.resolve({ success: true, data: user })
       }
-      return Promise.reject({ error: `You're not logged in!` })
+      return Promise.reject({ success: false, error: "You're not logged in!" })
     } catch (error) {
       console.error(error)
-      return Promise.reject(error)
+      return Promise.reject({ success: false, error })
     }
   }
-
 }

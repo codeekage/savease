@@ -1,9 +1,10 @@
+import {Request, Response} from 'express';
 import AuthService from '../services/auth.service'
 const auth = new AuthService()
 const userLogin = {};
 
 
-export async function handleLoginWithBody(request: any, response: any) {
+export async function handleLoginWithBody(request : Request, response : Response)  {
   try {
     const { email, password } = request.body
     const loggedIn = auth.login(email, password)
@@ -15,7 +16,7 @@ export async function handleLoginWithBody(request: any, response: any) {
   }
 }
 
-export async function handleLoginWithQuery(request: any, response: any) {
+export async function handleLoginWithQuery(request : Request, response : Response)  {
   try {
     const { email, password } = request.query
     const loggedIn = auth.login(email, password)
@@ -26,7 +27,7 @@ export async function handleLoginWithQuery(request: any, response: any) {
   }
 }
 
-export async function handleLogout(request: any, response: any) {
+export async function handleLogout(request : Request, response : Response)  {
   try {
     const nodes = await auth.logout()
     response.send(nodes)
@@ -36,7 +37,7 @@ export async function handleLogout(request: any, response: any) {
   }
 }
 
-export async function handleSignUp(request: any, response: any) {
+export async function handleSignUp(request : Request, response : Response)  {
   try {
     const { email, password } = request.body
     const loggedIn = await auth.signUp(email, password)
@@ -47,7 +48,7 @@ export async function handleSignUp(request: any, response: any) {
   }
 }
 
-export async function currentUser(request: any, response: any) {
+export async function currentUser(request : Request, response : Response)  {
   try {
     const nodes = await auth.currentUser()
     response.send({ data: nodes, login: userLogin })

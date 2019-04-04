@@ -3,7 +3,7 @@ import { Response, Request } from 'express'
 
 const product = new UnitServices()
 
-export async function  handleUnitFetch (request: any, response: any) {
+export async function  handleUnitFetch (request: Request, response: Response) {
   try {
     const data = await product.fetchUnits()
     response.send(data)
