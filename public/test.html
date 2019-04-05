@@ -20,10 +20,15 @@
       <input type="submit" value="batch" id="batch" />
     </div>
 
+    <div style="margin:10px">
+      <input type="submit" value="wallet" id="wallet" />
+    </div>
+
     <script>
       //amount, qty, unit
       const authURL = "http://localhost:5000/save-ease/us-central1/auth/";
       const transURL = "http://localhost:5000/save-ease/us-central1/units";
+      const batchURL = "http://localhost:5000/save-ease/us-central1/batch";
       document.querySelector("#submit").addEventListener("click", e => {
         e.preventDefault();
         const email = document.querySelector("#email").value;
@@ -35,7 +40,9 @@
               email,
               password
             })
-              .then(user => console.log(user))
+              .then(user => {
+                post(`${batchURL}/login?email=${email}&password=${password}`) .catch(error => console.log(error));
+              })
               .catch(error => console.log(error));
           })
           .catch(error => console.log(error));
@@ -45,23 +52,21 @@
         e.preventDefault();
         post(`${transURL}/batch`, {
           batched: {
-            "4cZiOU2EaV4n1VjxFrlV": 30,
-            "gZbfHiLtPqkOhyaFNTNH" : 10,
-            "sTjwAqfHRunyPlwCQY0e" : 5
+            "4cZiOU2EaV4n1VjxFrlV": 3,
+            gZbfHiLtPqkOhyaFNTNH: 10,
+            sTjwAqfHRunyPlwCQY0e: 5
           }
-        }).then(price => {
-          console.log(price);
-        }).catch(error => console.log(error));
+        })
+          .then(price => {
+            console.log(price);
+          })
+          .catch(error => console.log(error));
+      });
 
-        post(`${transURL}/batch/pins`, {
-          batched: {
-            "4cZiOU2EaV4n1VjxFrlV": 1,
-            "gZbfHiLtPqkOhyaFNTNH" : 1,
-            "sTjwAqfHRunyPlwCQY0e" : 5
-          }
-        }).then(price => {
-          console.log(price);
-        }).catch(error => console.log(error));
+      document.querySelector("#wallet").addEventListener("click", async e => {
+        e.preventDefault();
+        const wallet = await post(`${transURL}/wallet`, { fund: 1000 });
+        console.log(wallet);
       });
 
       async function post(url, body) {

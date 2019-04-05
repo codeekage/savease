@@ -9,21 +9,22 @@ export const handleBatchRequest = async (
 ) => {
   try {
     const { batched } = request.body
-    const batchRequest = await batch.batchRequest(batched)
+    const batchRequest = await batch.generateBatch(batched)
     response.send(batchRequest)
   } catch (error) {
     console.error(error)
     response.status(500).send(error)
   }
 }
-
+/* 
 export const handleBatchPins = async (request: Request, response: Response) => {
   try {
     const { batched } = request.body
-    const batchPins = await batch.generatePins(batched)
+    const batchPins = await batch.generateBatch(batched)
     response.send(batchPins)
   } catch (error) {
     console.error(error)
     response.status(500).send(error)
   }
 }
+ */
