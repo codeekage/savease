@@ -18,6 +18,7 @@
     "firebase": "^5.9.2",
     "firebase-admin": "~7.0.0",
     "firebase-functions": "^2.2.0",
+    "request": "^2.88.0",
     "sanitize-html": "^1.20.0"
   },
   "devDependencies": {
