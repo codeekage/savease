@@ -6,7 +6,7 @@ const userLogin = {}
 
 const http = 'http://localhost:5000/save-ease/us-central1'
 
-export async function handleLoginWithBody(
+export async function handleAsyncLogin(
   request: Request,
   response: Response
 ) {
@@ -32,7 +32,7 @@ export async function handleLoginWithBody(
   }
 }
 
-export async function handleLoginWithQuery(
+export async function handleLogin(
   request: Request,
   response: Response
 ) {
@@ -46,7 +46,7 @@ export async function handleLoginWithQuery(
   }
 }
 
-export async function handleLogout(request: Request, response: Response) {
+export async function handleAsyncLogout(request: Request, response: Response) {
   try {
     const nodes = await auth.logout()
     serviceRequest(`${http}/units/logout`, callBack)
@@ -58,7 +58,7 @@ export async function handleLogout(request: Request, response: Response) {
   }
 }
 
-export async function handleAsyncLogout(request: Request, response: Response) {
+export async function handleLogout(request: Request, response: Response) {
   try {
     const nodes = await auth.logout()
     response.send(nodes)
