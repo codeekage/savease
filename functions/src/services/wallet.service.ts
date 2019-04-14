@@ -11,6 +11,8 @@ export default class WalletService extends FirebaseService {
       const user = await this.auth.currentUser
       if (user) {
         const walletFund = await this.firestore
+          .collection('users')
+          .doc(`${user.uid}`)
           .collection('wallet')
           .doc(`${user.uid}`)
           .set({ fund })
@@ -37,10 +39,11 @@ export default class WalletService extends FirebaseService {
       const user = await this.auth.currentUser
       if (user) {
         const balance = await this.firestore
-          .collection('wallet')
+          .collection('users')
           .doc(`${user.uid}`)
+          .collection('wallet')
           .get()
-        const data = balance.data()
+        const data = balance.docs[0]
         return Promise.resolve({ success: true, data })
       }
       return Promise.reject({
@@ -55,10 +58,11 @@ export default class WalletService extends FirebaseService {
   async getFundsFromWalletById(userId: string): Promise<Result> {
     try {
       const balance = await this.firestore
-        .collection('wallet')
+        .collection('users')
         .doc(`${userId}`)
+        .collection('wallet')
         .get()
-      const data = balance.data()
+      const data = balance.docs[0]
       return Promise.resolve({ success: true, data })
     } catch (error) {
       console.error(error)

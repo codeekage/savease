@@ -1,6 +1,6 @@
 import * as cors from 'cors'
 import * as express from 'express'
-import { handleLoginWithQuery, handleLogout, handleLoginWithBody } from '../controllers/auth.handler'
+import { handleLoginWithQuery, handleLoginWithBody, handleAsyncLogout } from '../controllers/auth.handler'
 import { handleBatchRequest } from '../controllers/batch.handler';
 import { handleAddFund, handleGetFund } from '../controllers/wallet.handler';
 
@@ -9,7 +9,7 @@ service.use(cors())
 
 service.post('/login', handleLoginWithQuery)
 service.post('/login', handleLoginWithBody)
-service.post('/logout', handleLogout)
+service.get('/logout', handleAsyncLogout)
 service.post('/batch', handleBatchRequest)
 service.post('/wallet', handleAddFund)
 service.get('/wallet', handleGetFund)

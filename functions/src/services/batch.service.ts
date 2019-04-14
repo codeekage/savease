@@ -31,7 +31,7 @@ export default class BatchService extends WalletService {
         return parseInt(price) * parseInt(requestQty[qty])
       })
       let total = 0
-      prices.map(values => (total += (values * 5) / 100))
+      prices.map(values => (total += (values * 5) / 100)) 
       return Promise.resolve({
         success: true,
         data: { grandTotal: total, perPrice: prices },
@@ -53,9 +53,9 @@ export default class BatchService extends WalletService {
           }
         }
         const purchase = await this.firestore
-          .collection('purchase')
+          .collection('users')
           .doc(`${user.uid}`)
-          .collection(`batches`)
+          .collection(`purchase`)
           .add({ batches, timestamp : timeStamp() })
         const pins = await purchase.get()
         const balance = await this.setFundsToWallet(fund)

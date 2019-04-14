@@ -7,5 +7,5 @@ service.use(cors())
 
 service.post('/signup', handleSignUp)
 service.post('/login', handleLoginWithBody)
-service.post('/logout', handleLogout)
+service.get('/logout', handleLogout)
 service.get('/profile', currentUser)

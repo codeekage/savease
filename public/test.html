@@ -27,25 +27,14 @@
     <script>
       //amount, qty, unit
       const authURL = "http://localhost:5000/save-ease/us-central1/auth/";
-      const transURL = "http://localhost:5000/save-ease/us-central1/units";
-      const batchURL = "http://localhost:5000/save-ease/us-central1/batch";
-      document.querySelector("#submit").addEventListener("click", e => {
+      const transURL = "http://localhost:5000/save-ease/us-central1/units/";
+      const batchURL = "http://localhost:5000/save-ease/us-central1/batch/";
+      document.querySelector("#submit").addEventListener("click", async e => {
         e.preventDefault();
         const email = document.querySelector("#email").value;
         const password = document.querySelector("#password").value;
-        post(`${authURL}/login`, { email, password })
-          .then(data => {
-            console.log(data);
-            post(`${transURL}/login?email=${email}&password=${password}`, {
-              email,
-              password
-            })
-              .then(user => {
-                post(`${batchURL}/login?email=${email}&password=${password}`) .catch(error => console.log(error));
-              })
-              .catch(error => console.log(error));
-          })
-          .catch(error => console.log(error));
+        const userLogin = await post(`${authURL}/login`,{email, password})         
+        console.log(userLogin)
       });
 
       document.querySelector("#batch").addEventListener("click", e => {
