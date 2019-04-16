@@ -21,7 +21,7 @@ Some buttons are created in `test.html`.
 - POST `/signup` _create a new user with email and password_
 - GET `/profile` _fetch currently logged in user info_
 - GET `/logout` _logsout and destroy session_
-- PUT  `update` _update currently logged in user info_
+- PUT  `/update` _update currently logged in user info_
 
 #### Units `/units`
 - POST `/add` _add new unit set_
