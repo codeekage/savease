@@ -1,5 +1,8 @@
 import FirebaseService from './firebase.service'
+import WalletService from './wallet.service';
 
+
+const wallet = new WalletService();
 interface Result {
   success: boolean
   data: {} | undefined
@@ -12,7 +15,8 @@ export default class AuthService extends FirebaseService {
         email,
         password
       )
-      return Promise.resolve({ success: true, data })
+      const balance = await wallet.setFundsToWallet(0)
+      return Promise.resolve({ success: true, data, balance })
     } catch (error) {
       console.error(error)
       return Promise.reject(error)

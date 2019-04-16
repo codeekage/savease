@@ -1,16 +1,17 @@
-import * as functions from 'firebase-functions'
-import { sendEmail } from '../util/sendEmail'
+import EmailService from '../services/email.service'
 
-export const onCreateBatch = functions.firestore
-  .document(`users/{userId}/purchases/{purchaseId}`)
-  .onCreate(async (snapshot, context) => {
-    try {
-      const batch: any = snapshot.data()
-      const message = JSON.stringify(batch.batches)
-      const sent = await sendEmail(message)
-      return sent
-    } catch (error) {
-      console.error(error)
-      return error
-    }
-  })
+const email = new EmailService()
+
+export const onCreateBatch = async (snapshot: any, context: any) => {
+  try {
+    const uid = context.params.purchasesId
+    const sendEmail = await email.sendEmail(uid, {
+      subject: `Batch Pin Created`,
+      html: `<p>${JSON.stringify(snapshot.data())}</p>`,
+    })
+    return sendEmail
+  } catch (error) {
+    console.error(error)
+    return error
+  }
+}

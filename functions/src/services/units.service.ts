@@ -1,12 +1,11 @@
 import FirebaseService from './firebase.service'
-
 interface Result {
   success : boolean,
   data : {} | undefined
 }
 
 export default class UnitService extends FirebaseService {
-  addUnits = async (price: number, unit: number): Promise<Result> => {
+  addUnits = async (price: number | string, unit: number | string): Promise<Result> => {
     try {
       const product = await this.firestore
         .collection('units')
@@ -60,11 +59,10 @@ export default class UnitService extends FirebaseService {
 
   deleteUnits = async (unitId: string): Promise<Result> => {
     try {
-      const toDelete = await this.firestore
+      await this.firestore
         .collection('units')
         .doc(`${unitId}`)
         .delete()
-        console.log(toDelete)
       return Promise.resolve({ success: true, data : `Removed data with ${unitId}` })
     } catch (error) {
       console.error(error)

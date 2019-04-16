@@ -4,7 +4,7 @@ import AuthService from '../services/auth.service'
 const auth = new AuthService()
 const userLogin = {}
 
-const http = 'http://localhost:5000/save-ease/us-central1'
+const http = 'https://us-central1-save-ease.cloudfunctions.net'
 
 export async function handleAsyncLogin(
   request: Request,
@@ -91,6 +91,9 @@ export async function currentUser(request: Request, response: Response) {
 
 function callBack(error: any, responses: any, body: any) {
   !error && responses.statusCode === 200
-    ? console.info(body)
-    : console.error(error)
+    ? body
+    : error
+
+    console.log(body)
+    console.log(error)
 }

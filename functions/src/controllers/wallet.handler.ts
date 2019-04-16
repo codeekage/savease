@@ -5,6 +5,9 @@ const wallet = new WalletService()
 export const handleAddFund = async (request: Request, response: Response) => {
   try {
     const { fund } = request.body
+    if(typeof fund !== "number"){
+      throw new TypeError(`Don't Be Smart`)
+    }
     const result = await wallet.setFundsToWallet(fund)
     response.send(result)
   } catch (error) {

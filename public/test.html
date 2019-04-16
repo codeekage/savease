@@ -26,20 +26,18 @@
 
     <script>
       //amount, qty, unit
-      const authURL = "http://localhost:5000/save-ease/us-central1/auth/";
-      const transURL = "http://localhost:5000/save-ease/us-central1/units/";
-      const batchURL = "http://localhost:5000/save-ease/us-central1/batch/";
+      const URL = " https://us-central1-save-ease.cloudfunctions.net";
       document.querySelector("#submit").addEventListener("click", async e => {
         e.preventDefault();
         const email = document.querySelector("#email").value;
         const password = document.querySelector("#password").value;
-        const userLogin = await post(`${authURL}/login`,{email, password})         
+        const userLogin = await post(`${URL}/auth/login`,{email, password})         
         console.log(userLogin)
       });
 
       document.querySelector("#batch").addEventListener("click", e => {
         e.preventDefault();
-        post(`${transURL}/batch`, {
+        post(`${URL}/units/batch`, {
           batched: {
             "4cZiOU2EaV4n1VjxFrlV": 3,
             gZbfHiLtPqkOhyaFNTNH: 10,
@@ -54,7 +52,7 @@
 
       document.querySelector("#wallet").addEventListener("click", async e => {
         e.preventDefault();
-        const wallet = await post(`${transURL}/wallet`, { fund: 1000 });
+        const wallet = await post(`${URL}/units/wallet`, { fund: 1000 });
         console.log(wallet);
       });
 
