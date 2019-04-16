@@ -24,7 +24,7 @@ Some buttons are created in `test.html`.
 
 #### Units `/units`
 - POST `/add` _add new unit set_
-_ GET `/fetch` _fetch avaliable unit sets_
+- GET `/fetch` _fetch avaliable unit sets_
 - GET `/fetch/:id` _fetch with unit set id_
 - POST `/login` _avaliable but do not use_
 - GET `/logout` _avaliable but do not use_
@@ -37,6 +37,8 @@ _ GET `/fetch` _fetch avaliable unit sets_
 - GET `/fetch/:id` _force get batch set with the id provided_ 
 
 #### Wallet `/wallet`
+- POST `/login` _avaliable but do not use_
+- GET `/logout` _avaliable but do not use_
 - PUT `/add` _update users wallet_
 - GET `/fetch` _get wallet of the currently logged in user_
 - GET `/fetch/:id` _force get wallet with the id provided_
