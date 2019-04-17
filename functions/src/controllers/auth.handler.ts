@@ -3,8 +3,8 @@ import * as serviceRequest from 'request'
 import AuthService from '../services/auth.service'
 const auth = new AuthService()
 
-//const http = 'https://us-central1-save-ease.cloudfunctions.net'
-const http = 'http://localhost:5000/save-ease/us-central1'
+const http = 'https://us-central1-save-ease.cloudfunctions.net'
+//const http = 'http://localhost:5000/save-ease/us-central1'
 
 export async function handleAsyncLogin(request: Request, response: Response) {
   try {
