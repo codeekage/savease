@@ -86,7 +86,7 @@ export default class WalletService extends FirebaseService {
           .doc(`${user.uid}`)
           .collection('history')
           .get()
-        await balance.forEach(async history => await data.push(history.data()))
+        balance.forEach(async history => await data.push(history.data()))
 
         return Promise.resolve({ success: true, data })
       }

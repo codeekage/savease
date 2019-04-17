@@ -114,7 +114,7 @@ export default class BatchService extends WalletService {
 
   async getUserBatchHistory(): Promise<Result> {
     try {
-      const data : any = []
+      const data: any = []
       const user = this.auth.currentUser
       if (user) {
         const history = await this.firestore
@@ -122,7 +122,7 @@ export default class BatchService extends WalletService {
           .doc(`${user.uid}`)
           .collection('batches')
           .get()
-        await history.forEach(async batches => await data.push(batches.data()))
+        history.forEach(async batches => await batches.data())
         return Promise.resolve({ success: true, data })
       }
       return Promise.resolve({
