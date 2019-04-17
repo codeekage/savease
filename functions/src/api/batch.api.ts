@@ -10,6 +10,6 @@ service.use(cors())
 service.post('/login', handleLogin)
 service.get('/logout', handleLogout)
 service.post('/add', handleBatchRequest)
-service.post('/history', handleBatchHistory)
-service.post('/history/:id', forecHandleBatchHistory)
+service.get('/history', handleBatchHistory)
+service.get('/history/:id', forecHandleBatchHistory)
 
