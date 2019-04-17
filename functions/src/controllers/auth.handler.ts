@@ -2,14 +2,10 @@ import { Request, Response } from 'express'
 import * as serviceRequest from 'request'
 import AuthService from '../services/auth.service'
 const auth = new AuthService()
-const userLogin = {}
 
 const http = 'https://us-central1-save-ease.cloudfunctions.net'
 
-export async function handleAsyncLogin(
-  request: Request,
-  response: Response
-) {
+export async function handleAsyncLogin(request: Request, response: Response) {
   try {
     const { email, password } = request.body
     const loggedIn = await auth.login(email, password)
@@ -19,7 +15,10 @@ export async function handleAsyncLogin(
     const batch = await serviceRequest.post({
       url: `${http}/batch/login?email=${email}&password=${password}`,
     })
-    if (unit && batch) {
+    const wallet = await serviceRequest.post({
+      url: `${http}/wallet/login?email=${email}&password=${password}`,
+    })
+    if (unit && batch && wallet) {
       response.send(loggedIn)
     } else {
       response
@@ -32,10 +31,7 @@ export async function handleAsyncLogin(
   }
 }
 
-export async function handleLogin(
-  request: Request,
-  response: Response
-) {
+export async function handleLogin(request: Request, response: Response) {
   try {
     const { email, password } = request.query
     const loggedIn = await auth.login(email, password)
@@ -75,14 +71,25 @@ export async function handleSignUp(request: Request, response: Response) {
     response.send(loggedIn)
   } catch (error) {
     console.error(error)
-    response.status(500).send(error)
+    response.status(500).send({ error })
   }
 }
 
 export async function currentUser(request: Request, response: Response) {
   try {
-    const nodes = await auth.currentUser()
-    response.send({ data: nodes, login: userLogin })
+    const user = await auth.currentUser()
+    response.send({ user })
+  } catch (error) {
+    console.error(error)
+    response.status(500).send({ error })
+  }
+}
+
+export async function handleUserUpdate(request: Request, response: Response) {
+  try {
+    const update = request.body
+    const user = await auth.updateUser(update)
+    response.send({ user })
   } catch (error) {
     console.error(error)
     response.status(500).send({ error })
@@ -90,10 +97,8 @@ export async function currentUser(request: Request, response: Response) {
 }
 
 function callBack(error: any, responses: any, body: any) {
-  !error && responses.statusCode === 200
-    ? body
-    : error
+  !error && responses.statusCode === 200 ? body : error
 
-    console.log(body)
-    console.log(error)
+  console.log(body)
+  console.log(error)
 }

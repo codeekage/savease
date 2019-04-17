@@ -1,11 +1,15 @@
 import FirebaseService from './firebase.service'
-import WalletService from './wallet.service';
+import WalletService from './wallet.service'
 
-
-const wallet = new WalletService();
+const wallet = new WalletService()
 interface Result {
   success: boolean
   data: {} | undefined
+}
+
+interface User {
+  displayName: string
+  photoURL: string
 }
 
 export default class AuthService extends FirebaseService {
@@ -53,6 +57,31 @@ export default class AuthService extends FirebaseService {
     } catch (error) {
       console.error(error)
       return Promise.reject({ success: false, error })
+    }
+  }
+
+  async updateUser(updates: User): Promise<Result> {
+    try {
+      const user = this.auth.currentUser
+      if (user) {
+        if (!/^[a-zA-Z]+$/.test(updates.displayName)) {
+          return Promise.reject({
+            success: false,
+            data: "Name can't contain symbols",
+          })
+        }
+        await user.updateProfile({
+          displayName: updates.displayName,
+          photoURL: updates.photoURL,
+        })
+        return Promise.resolve({ success: true, data: updates })
+      }
+      return Promise.reject({
+        success: false,
+        data: "You don't have the permssion to this!",
+      })
+    } catch (error) {
+      return Promise.reject({ success: false })
     }
   }
 }

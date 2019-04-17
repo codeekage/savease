@@ -1,4 +1,5 @@
 import WalletService from './wallet.service'
+import { getPins, timeStamp } from '../util'
 interface Result {
   success: boolean
   data: {} | undefined
@@ -31,7 +32,7 @@ export default class BatchService extends WalletService {
         return parseInt(price) * parseInt(requestQty[qty])
       })
       let total = 0
-      prices.map(values => (total += (values * 5) / 100)) 
+      prices.map(values => (total += (values * 5) / 100))
       return Promise.resolve({
         success: true,
         data: { grandTotal: total, perPrice: prices },
@@ -42,7 +43,10 @@ export default class BatchService extends WalletService {
     }
   }
 
-  async generatePinsAndUpdateBalance(batched: any, fund : number): Promise<Result> {
+  async generatePinsAndUpdateBalance(
+    batched: any,
+    fund: number
+  ): Promise<Result> {
     try {
       const user = await this.auth.currentUser
       if (user) {
@@ -56,10 +60,13 @@ export default class BatchService extends WalletService {
           .collection('purchases')
           .doc(`${user.uid}`)
           .collection('batches')
-          .add({ batches, timestamp : timeStamp() })
+          .add({ batches, timestamp: timeStamp() })
         const pins = await purchase.get()
         const balance = await this.setFundsToWallet(fund)
-        return Promise.resolve({ success: true, data: {_pins : pins.data(), balance } })
+        return Promise.resolve({
+          success: true,
+          data: { _pins: pins.data(), balance },
+        })
       }
       return Promise.reject({
         success: false,
@@ -81,9 +88,9 @@ export default class BatchService extends WalletService {
           const { data } = await this.getFundsFromWalletById(user.uid)
           const balance = data
           if (balance && balance.fund > grandTotal) {
-            const fund = balance.fund - grandTotal;
+            const fund = balance.fund - grandTotal
             const pins = await this.generatePinsAndUpdateBalance(batched, fund)
-            return Promise.resolve({ success: true, data : pins.data })
+            return Promise.resolve({ success: true, data: pins.data })
           }
           return Promise.reject({
             success: false,
@@ -104,22 +111,39 @@ export default class BatchService extends WalletService {
       return Promise.reject({ success: false, error })
     }
   }
-}
 
-function getPins() : object{
-  const min = 111111111111
-  const max = 9999999999999
-  const pin = Math.floor(Math.random() * (+max - +min) + +min)
-  const serial_no = Math.floor(Math.random() * (+max - +min) + +min)
-  return { _pins: { pin, serial_no } }
-}
+  async getUserBatchHistory(): Promise<Result> {
+    try {
+      const user = this.auth.currentUser
+      if (user) {
+        const history = await this.firestore
+          .collection('purchases')
+          .doc(`${user.uid}`)
+          .get()
+        const data = history.data()
+        return Promise.resolve({ success: true, data })
+      }
+      return Promise.resolve({
+        success: false,
+        data: 'You dont have the permission to do this',
+      })
+    } catch (error) {
+      console.error(error)
+      return Promise.reject({ error })
+    }
+  }
 
-function timeStamp() : string {
-  const date = new Date().getUTCDate(),
-    hour = new Date().getUTCHours(),
-    min = new Date().getUTCMinutes(),
-    sec = new Date().getUTCSeconds(),
-    mil_sec = new Date().getUTCMilliseconds()
-
-  return `${date}-${hour}-${min}-${sec}-${mil_sec}`
+  async forceUserBatchHistory(userId: string): Promise<Result> {
+    try {
+      const history = await this.firestore
+        .collection('purchases')
+        .doc(`${userId}`)
+        .get()
+      const data = history.data()
+      return Promise.resolve({ success: true, data })
+    } catch (error) {
+      console.error(error)
+      return Promise.reject({ error })
+    }
+  }
 }

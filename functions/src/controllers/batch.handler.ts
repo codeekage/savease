@@ -16,15 +16,30 @@ export const handleBatchRequest = async (
     response.status(500).send(error)
   }
 }
-/* 
-export const handleBatchPins = async (request: Request, response: Response) => {
+
+export const handleBatchHistory = async (
+  request: Request,
+  response: Response
+) => {
   try {
-    const { batched } = request.body
-    const batchPins = await batch.generateBatch(batched)
-    response.send(batchPins)
+    const history = await batch.getUserBatchHistory()
+    response.send(history)
   } catch (error) {
     console.error(error)
     response.status(500).send(error)
   }
 }
- */
+
+export const forecHandleBatchHistory = async (
+  request: Request,
+  response: Response
+) => {
+  try {
+    const { userId } = request.params
+    const history = await batch.forceUserBatchHistory(userId)
+    response.send(history)
+  } catch (error) {
+    console.error(error)
+    response.status(500).send(error)
+  }
+}

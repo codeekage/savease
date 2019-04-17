@@ -1,8 +1,7 @@
 import * as cors from 'cors'
 import * as express from 'express'
 import { handleLogout, handleLogin } from '../controllers/auth.handler'
-import { handleBatchRequest } from '../controllers/batch.handler';
-import { handleAddFund, handleGetFund } from '../controllers/wallet.handler';
+import { handleBatchRequest, handleBatchHistory, forecHandleBatchHistory } from '../controllers/batch.handler';
 
 export const service = express()
 service.use(cors())
@@ -10,6 +9,7 @@ service.use(cors())
 
 service.post('/login', handleLogin)
 service.get('/logout', handleLogout)
-service.post('/batch', handleBatchRequest)
-service.post('/wallet', handleAddFund)
-service.get('/wallet', handleGetFund)
+service.post('/add', handleBatchRequest)
+service.post('/history', handleBatchHistory)
+service.post('/history/:id', forecHandleBatchHistory)
+
