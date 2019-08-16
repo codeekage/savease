@@ -1,5 +1,10 @@
 # savease
 
+### Intention
+
+
+Create a seamless way of communicate muitple deployed cloud functions as one. 
+
 
 ## How to use
 
@@ -14,9 +19,6 @@ Have a reliable terminal for windows installed everything will be done with term
 Some buttons are created in `test.html`.
 
 ## Avaliable Routes
-
-**Base URL: https://us-central1-save-ease.cloudfunctions.net**
-
 
 #### Auth `/auth`
 
